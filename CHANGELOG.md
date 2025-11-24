@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/gocloudLa/terraform-aws-wrapper-iam/compare/v0.1.0...v0.1.1) (2025-11-24)
+
+
+### Bug Fixes
+
+* **module:** empty values handling ([#3](https://github.com/gocloudLa/terraform-aws-wrapper-iam/issues/3)) ([ad1e31d](https://github.com/gocloudLa/terraform-aws-wrapper-iam/commit/ad1e31d2750f4c308ddc8a7749cfdc1339aab89c))
+
 ## 0.1.0 (2025-11-24)
 
 
