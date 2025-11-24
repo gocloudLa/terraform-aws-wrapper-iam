@@ -6,7 +6,7 @@ module "wrapper_iam" {
   iam_parameters = {
     oidc_provider = {
       github = {
-        url            = "https://token.actions.githubusercontent.com"
+        url = "https://token.actions.githubusercontent.com"
       }
     }
     role = {
