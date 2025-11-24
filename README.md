@@ -235,45 +235,41 @@ iam_parameters = {
 
 
 ## 📑 Inputs
-| Name                             | Description                                                                   | Type           | Default                                         | Required   |
-| -------------------------------- | ----------------------------------------------------------------------------- | -------------- | ----------------------------------------------- | ---------- |
-| Name                             | Description                                                                   | Type           | Default                                         | Required   |
-| ------                           | -------------                                                                 | ------         | ---------                                       | :--------: |
-| create                           | Controls if resources should be created                                       | `bool`         | `true`                                          | no         |
-| name                             | Name to use on IAM role created                                               | `string`       | `null`                                          | no         |
-| use_name_prefix                  | Determines whether the IAM role name is used as a prefix                      | `bool`         | `true`                                          | no         |
-| path                             | Path of IAM role                                                              | `string`       | `null`                                          | no         |
-| description                      | Description of the role                                                       | `string`       | `null`                                          | no         |
-| max_session_duration             | Maximum session duration (in seconds) for the role                            | `number`       | `null`                                          | no         |
-| permissions_boundary             | ARN of the policy used to set the permissions boundary                        | `string`       | `null`                                          | no         |
-| trust_policy_permissions         | A map of IAM policy statements for custom trust policy permissions            | `map(object)`  | `null`                                          | no         |
-| trust_policy_conditions          | Condition constraints applied to the trust policy(s)                          | `list(object)` | `[]`                                            | no         |
-| policies                         | Policies to attach to the IAM role in `{'static_name' = 'policy_arn'}` format | `map(string)`  | `{}`                                            | no         |
-| enable_oidc                      | Enable OIDC provider trust for the role                                       | `bool`         | `false`                                         | no         |
-| oidc_account_id                  | Overriding AWS account ID where the OIDC provider lives                       | `string`       | `null`                                          | no         |
-| oidc_provider_urls               | List of URLs of the OIDC Providers                                            | `list(string)` | `[]`                                            | no         |
-| oidc_subjects                    | The fully qualified OIDC subjects to be added to the role policy              | `list(string)` | `[]`                                            | no         |
-| oidc_wildcard_subjects           | The OIDC subject using wildcards to be added to the role policy               | `list(string)` | `[]`                                            | no         |
-| oidc_audiences                   | The audience to be added to the role policy                                   | `list(string)` | `[]`                                            | no         |
-| enable_github_oidc               | Enable GitHub OIDC provider trust for the role                                | `bool`         | `false`                                         | no         |
-| github_provider                  | The GitHub OIDC provider URL without the `https://` prefix                    | `string`       | `"token.actions.githubusercontent.com"`         | no         |
-| enable_bitbucket_oidc            | Enable Bitbucket OIDC provider trust for the role                             | `bool`         | `false`                                         | no         |
-| enable_saml                      | Enable SAML provider trust for the role                                       | `bool`         | `false`                                         | no         |
-| saml_provider_ids                | List of SAML provider IDs                                                     | `list(string)` | `[]`                                            | no         |
-| saml_endpoints                   | List of AWS SAML endpoints                                                    | `list(string)` | `["https://signin.aws.amazon.com/saml"]`        | no         |
-| saml_trust_actions               | Additional assume role trust actions for the SAML federated statement         | `list(string)` | `[]`                                            | no         |
-| create_inline_policy             | Determines whether to create an inline policy                                 | `bool`         | `false`                                         | no         |
-| source_inline_policy_documents   | List of IAM policy documents that are merged together                         | `list(string)` | `[]`                                            | no         |
-| override_inline_policy_documents | List of IAM policy documents that override existing statements                | `list(string)` | `[]`                                            | no         |
-| inline_policy_permissions        | A map of IAM policy statements for inline policy permissions                  | `map(object)`  | `null`                                          | no         |
-| create_instance_profile          | Determines whether to create an instance profile                              | `bool`         | `false`                                         | no         |
-| tags                             | A map of tags to add to all resources                                         | `map(string)`  | `{}`                                            | no         |
-| Name                             | Description                                                                   | Type           | Default                                         | Required   |
-| ------                           | -------------                                                                 | ------         | ---------                                       | :--------: |
-| create                           | Controls if resources should be created                                       | `bool`         | `true`                                          | no         |
-| url                              | The URL of the identity provider. Corresponds to the iss claim                | `string`       | `"https://token.actions.githubusercontent.com"` | no         |
-| client_id_list                   | List of client IDs (also known as audiences) for the IAM OIDC provider        | `list(string)` | `[]`                                            | no         |
-| tags                             | A map of tags to add to the resources created                                 | `map(any)`     | `{}`                                            | no         |
+| Name                                  | Description                                                                   | Type           | Default                                         | Required |
+| ------------------------------------- | ----------------------------------------------------------------------------- | -------------- | ----------------------------------------------- | -------- |
+| role.create                           | Controls if resources should be created                                       | `bool`         | `true`                                          | no       |
+| role.name                             | Name to use on IAM role created                                               | `string`       | `"${local.common_name}-${each.key}"`            | no       |
+| role.use_name_prefix                  | Determines whether the IAM role name is used as a prefix                      | `bool`         | `true`                                          | no       |
+| role.path                             | Path of IAM role                                                              | `string`       | `null`                                          | no       |
+| role.description                      | Description of the role                                                       | `string`       | `null`                                          | no       |
+| role.max_session_duration             | Maximum session duration (in seconds) for the role                            | `number`       | `null`                                          | no       |
+| role.permissions_boundary             | ARN of the policy used to set the permissions boundary                        | `string`       | `null`                                          | no       |
+| role.trust_policy_permissions         | A map of IAM policy statements for custom trust policy permissions            | `map(object)`  | `null`                                          | no       |
+| role.trust_policy_conditions          | Condition constraints applied to the trust policy(s)                          | `list(object)` | `[]`                                            | no       |
+| role.policies                         | Policies to attach to the IAM role in `{'static_name' = 'policy_arn'}` format | `map(string)`  | `{}`                                            | no       |
+| role.enable_oidc                      | Enable OIDC provider trust for the role                                       | `bool`         | `false`                                         | no       |
+| role.oidc_account_id                  | Overriding AWS account ID where the OIDC provider lives                       | `string`       | `null`                                          | no       |
+| role.oidc_provider_urls               | List of URLs of the OIDC Providers                                            | `list(string)` | `[]`                                            | no       |
+| role.oidc_subjects                    | The fully qualified OIDC subjects to be added to the role policy              | `list(string)` | `[]`                                            | no       |
+| role.oidc_wildcard_subjects           | The OIDC subject using wildcards to be added to the role policy               | `list(string)` | `[]`                                            | no       |
+| role.oidc_audiences                   | The audience to be added to the role policy                                   | `list(string)` | `[]`                                            | no       |
+| role.enable_github_oidc               | Enable GitHub OIDC provider trust for the role                                | `bool`         | `false`                                         | no       |
+| role.github_provider                  | The GitHub OIDC provider URL without the `https://` prefix                    | `string`       | `"token.actions.githubusercontent.com"`         | no       |
+| role.enable_bitbucket_oidc            | Enable Bitbucket OIDC provider trust for the role                             | `bool`         | `false`                                         | no       |
+| role.enable_saml                      | Enable SAML provider trust for the role                                       | `bool`         | `false`                                         | no       |
+| role.saml_provider_ids                | List of SAML provider IDs                                                     | `list(string)` | `[]`                                            | no       |
+| role.saml_endpoints                   | List of AWS SAML endpoints                                                    | `list(string)` | `["https://signin.aws.amazon.com/saml"]`        | no       |
+| role.saml_trust_actions               | Additional assume role trust actions for the SAML federated statement         | `list(string)` | `[]`                                            | no       |
+| role.create_inline_policy             | Determines whether to create an inline policy                                 | `bool`         | `false`                                         | no       |
+| role.source_inline_policy_documents   | List of IAM policy documents that are merged together                         | `list(string)` | `[]`                                            | no       |
+| role.override_inline_policy_documents | List of IAM policy documents that override existing statements                | `list(string)` | `[]`                                            | no       |
+| role.inline_policy_permissions        | A map of IAM policy statements for inline policy permissions                  | `map(object)`  | `null`                                          | no       |
+| role.create_instance_profile          | Determines whether to create an instance profile                              | `bool`         | `false`                                         | no       |
+| role.tags                             | A map of tags to add to all resources                                         | `map(string)`  | `{}`                                            | no       |
+| oidc_provider.create                  | Controls if resources should be created                                       | `bool`         | `true`                                          | no       |
+| oidc_provider.url                     | The URL of the identity provider. Corresponds to the iss claim                | `string`       | `"https://token.actions.githubusercontent.com"` | no       |
+| oidc_provider.client_id_list          | List of client IDs (also known as audiences) for the IAM OIDC provider        | `list(string)` | `[]`                                            | no       |
+| oidc_provider.tags                    | A map of tags to add to the resources created                                 | `map(any)`     | `{}`                                            | no       |
 
 
 
