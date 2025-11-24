@@ -2,7 +2,7 @@ module "iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
   version = "6.2.3"
 
-  for_each = var.iam_parameters.role
+  for_each = try(var.iam_parameters.role, {})
 
   create                           = try(each.value.create, var.iam_defaults.role.create, true)
   name                             = try(each.value.name, var.iam_defaults.role.name, "${local.common_name}-${each.key}")
@@ -40,7 +40,7 @@ module "iam_oidc_provider" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-oidc-provider"
   version = "6.2.3"
 
-  for_each = var.iam_parameters.oidc_provider
+  for_each = try(var.iam_parameters.oidc_provider, {})
 
   client_id_list = try(each.value.client_id_list, var.iam_defaults.oidc_provider.client_id_list, [])
   create         = try(each.value.create, var.iam_defaults.oidc_provider.create, true)
