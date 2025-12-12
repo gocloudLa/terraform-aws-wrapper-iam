@@ -56,7 +56,7 @@ module "wrapper_iam" {
               "arn:aws:ecr:${local.metadata.aws_region}:${data.aws_caller_identity.current.account_id}:repository/${local.common_name}*"
             ]
           }
-          "ecr" = {
+          "ecs" = {
             effect = "Allow"
             actions = [
               "ecs:DescribeTaskDefinition",
