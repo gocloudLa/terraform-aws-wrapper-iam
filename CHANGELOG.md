@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/gocloudLa/terraform-aws-wrapper-iam/compare/v0.1.1...v0.1.2) (2026-02-26)
+
+
+### Bug Fixes
+
+* **deps:** bump terraform-aws-modules/iam/aws from 6.2.3 to 6.4.0 in the all-terraform-dependencies group across 1 directory ([#6](https://github.com/gocloudLa/terraform-aws-wrapper-iam/issues/6)) ([0601548](https://github.com/gocloudLa/terraform-aws-wrapper-iam/commit/0601548fa60405302c4b17edaeaec4804b3268ae))
+
 ## [0.1.1](https://github.com/gocloudLa/terraform-aws-wrapper-iam/compare/v0.1.0...v0.1.1) (2025-11-24)
 
 
