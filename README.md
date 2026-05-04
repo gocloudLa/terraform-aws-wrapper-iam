@@ -19,7 +19,7 @@ The Terraform Wrapper for IAM simplifies the configuration of IAM roles and OIDC
 ### 🔗 External Modules
 | Name | Version |
 |------|------:|
-| <a href="https://github.com/terraform-aws-modules/terraform-aws-iam" target="_blank">terraform-aws-modules/iam/aws</a> | 6.4.0 |
+| <a href="https://github.com/terraform-aws-modules/terraform-aws-iam" target="_blank">terraform-aws-modules/iam/aws</a> | 6.6.0 |
 
 
 
