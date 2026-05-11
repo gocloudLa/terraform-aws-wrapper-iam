@@ -1,6 +1,6 @@
 module "iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version = "6.4.0"
+  version = "6.6.0"
 
   for_each = try(var.iam_parameters.role, {})
 
@@ -38,7 +38,7 @@ module "iam_role" {
 
 module "iam_oidc_provider" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-oidc-provider"
-  version = "6.4.0"
+  version = "6.6.0"
 
   for_each = try(var.iam_parameters.oidc_provider, {})
 
