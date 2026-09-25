@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/gocloudLa/terraform-aws-wrapper-iam/compare/v0.1.2...v0.2.0) (2026-09-25)
+
+
+### Features
+
+* **module:** add IAM user module support ([#11](https://github.com/gocloudLa/terraform-aws-wrapper-iam/issues/11)) ([2ebb152](https://github.com/gocloudLa/terraform-aws-wrapper-iam/commit/2ebb1525ad22260e8c778d36fe1136d7b8589856))
+
 ## [0.1.2](https://github.com/gocloudLa/terraform-aws-wrapper-iam/compare/v0.1.1...v0.1.2) (2026-02-26)
 
 
