@@ -1,5 +1,5 @@
 module_name: Terraform IAM Wrapper Module
-module_description: The Terraform Wrapper for IAM simplifies the configuration of IAM roles and OIDC providers in the AWS cloud. This wrapper functions as a predefined template, facilitating the creation and management of IAM resources by handling all the technical details.
+module_description: The Terraform Wrapper for IAM simplifies the configuration of IAM roles, OIDC providers, and service users in the AWS cloud. This wrapper functions as a predefined template, facilitating the creation and management of IAM resources by handling all the technical details.
 module_badges:
   - url: "https://github.com/gocloudLa/terraform-aws-wrapper-iam/releases/latest"
     image: "https://img.shields.io/github/v/release/gocloudLa/terraform-aws-wrapper-iam.svg?style=for-the-badge"
@@ -206,11 +206,54 @@ features:
             }
           }
           ```
+  - icon: 🔑
+    title: Service IAM User
+    short_description: Create an IAM user with an access key for an external system that cannot assume a role
+    long_description: |
+      Create a service IAM user without console access and attach an inline policy for a single integration, such as pushing images to ECR. When `create_ssm_parameters` is enabled, the access key ID and secret are stored together as JSON in one SSM Parameter Store SecureString. The secret remains in the Terraform state.
+    examples:
+      - title: ECR Push User
+        code: |
+          ```hcl
+          iam_parameters = {
+            user = {
+              ecr_vendor = {
+                create_login_profile   = false
+                create_access_key      = true
+                create_ssm_parameters  = true
+                create_inline_policy   = true
+                inline_policy_permissions = {
+                  "ecr-auth" = {
+                    effect = "Allow"
+                    actions = [
+                      "ecr:GetAuthorizationToken"
+                    ]
+                    resources = ["*"]
+                  }
+                  "ecr-push" = {
+                    effect = "Allow"
+                    actions = [
+                      "ecr:BatchCheckLayerAvailability",
+                      "ecr:InitiateLayerUpload",
+                      "ecr:UploadLayerPart",
+                      "ecr:CompleteLayerUpload",
+                      "ecr:PutImage"
+                    ]
+                    resources = [
+                      "arn:aws:ecr:${local.metadata.aws_region}:${data.aws_caller_identity.current.account_id}:repository/${local.common_name}*"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+          ```
 important_notes: |
   - **🔐 Security Best Practice:** Always use the principle of least privilege when configuring IAM roles and policies.
   - **⚠️ OIDC Subjects:** Be specific with OIDC subjects to restrict access to only the necessary repositories, branches, or workflows.
   - **ℹ️ Permissions Boundary:** Use `permissions_boundary` to set an upper limit on permissions that a role can have.
   - **🔄 Session Duration:** Configure `max_session_duration` appropriately based on your security requirements (1-12 hours).
+  - **🔒 Access Key Secret:** The IAM access key secret is stored in Terraform state. SSM Parameter Store is an additional copy, not a replacement.
 input_table: |
   | role.create | Controls if resources should be created | `bool` | `true` | no |
   | role.name | Name to use on IAM role created | `string` | `"${local.common_name}-${each.key}"` | no |
@@ -245,3 +288,26 @@ input_table: |
   | oidc_provider.url | The URL of the identity provider. Corresponds to the iss claim | `string` | `"https://token.actions.githubusercontent.com"` | no |
   | oidc_provider.client_id_list | List of client IDs (also known as audiences) for the IAM OIDC provider | `list(string)` | `[]` | no |
   | oidc_provider.tags | A map of tags to add to the resources created | `map(any)` | `{}` | no |
+  | user.create | Controls if the IAM user should be created | `bool` | `true` | no |
+  | user.name | Name of the IAM user | `string` | `"${local.common_name}-${each.key}"` | no |
+  | user.path | Path of the IAM user | `string` | `null` | no |
+  | user.permissions_boundary | ARN of the policy used to set the permissions boundary | `string` | `null` | no |
+  | user.force_destroy | Destroy the user even when it has non-Terraform-managed keys, login profile, or MFA devices | `bool` | `false` | no |
+  | user.policies | Policies to attach to the IAM user in `{'static_name' = 'policy_arn'}` format | `map(string)` | `{}` | no |
+  | user.create_login_profile | Whether to create an IAM user login profile | `bool` | `false` | no |
+  | user.pgp_key | PGP key used to encrypt the password and the access key secret | `string` | `null` | no |
+  | user.password_length | Length of the generated console password | `number` | `null` | no |
+  | user.password_reset_required | Whether the user must reset the generated password on first login | `bool` | `true` | no |
+  | user.create_access_key | Whether to create an IAM access key | `bool` | `true` | no |
+  | user.access_key_status | Access key status to apply | `string` | `null` | no |
+  | user.create_ssh_key | Whether to upload a public SSH key to the IAM user | `bool` | `false` | no |
+  | user.ssh_key_encoding | Public key encoding format (`SSH` or `PEM`) | `string` | `"SSH"` | no |
+  | user.ssh_public_key | SSH public key encoded in ssh-rsa or PEM format | `string` | `""` | no |
+  | user.create_inline_policy | Whether to create an inline policy | `bool` | `false` | no |
+  | user.source_inline_policy_documents | List of IAM policy documents that are merged together | `list(string)` | `[]` | no |
+  | user.override_inline_policy_documents | List of IAM policy documents that override existing statements | `list(string)` | `[]` | no |
+  | user.inline_policy_permissions | A map of IAM policy statements for inline policy permissions | `map(object)` | `null` | no |
+  | user.create_ssm_parameters | Store the access key ID and secret as JSON in one SSM SecureString | `bool` | `false` | no |
+  | user.ssm_parameter_prefix | Prefix for the SSM parameter name | `string` | `"/${local.common_name}/${each.key}"` | no |
+  | user.ssm_kms_key_id | KMS key ID used to encrypt the access key secret parameter | `string` | `null` | no |
+  | user.tags | A map of tags to add to the user and the SSM parameter | `map(string)` | `{}` | no |
